@@ -1,0 +1,14 @@
+{
+  "name": "white-hat-bot",
+  "version": "1.0.0",
+  "description": "Bot for UWA Ethical Hacking Discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Haolin Wu",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}

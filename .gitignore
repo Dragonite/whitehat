@@ -1,0 +1,13 @@
+# Packages
+node_modules/
+yarn.lock
+package-lock.json
+
+# Configuration File
+botconfig.json
+
+# Miscellaneous
+.tmp/
+.vscode/
+*.DS_Store
+.idea/
