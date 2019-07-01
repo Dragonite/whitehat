@@ -1,7 +1,7 @@
 const config = require("../botconfig.json");
 const adminList = config.adminList;
 
-exports.run = (client, message, args, welcome, everyone, getAdminName) => {
+exports.run = (client, message, args, clientEventChannel, everyone, getAdminName) => {
   const newLineArgs = message.content.slice(config.prefix.length).trim().split('\n');
   newLineArgs.shift();
   if (adminList.includes(message.author.id)) {
@@ -10,7 +10,7 @@ exports.run = (client, message, args, welcome, everyone, getAdminName) => {
       const location = newLineArgs[1] || "Not Specified";
       const dateAndTime = newLineArgs[2] || "Not Specified";
       const extraInformation = newLineArgs[3] || "Not Specified";
-      message.channel.send({
+      clientEventChannel.send({
         embed: {
           color: 3447003,
           title,
@@ -35,7 +35,7 @@ exports.run = (client, message, args, welcome, everyone, getAdminName) => {
           }
         }
       })
-      message.channel.send(everyone).then(msg => { msg.delete(1) }).catch(console.error);
+      clientEventChannel.send(everyone).then(msg => { msg.delete(1) }).catch(console.error);
     } else {
       message.channel.send({
         embed: {

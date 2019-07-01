@@ -4,7 +4,7 @@ const fs = require('fs');
 const Enmap = require('enmap');
 const client = new Discord.Client();
 
-const { prefix, token, adminList, activity, welcomeChannel, welcomeMessage, helperRoleList } = config;
+const { prefix, token, adminList, activity, welcomeChannel, welcomeMessage, helperRoleList, eventChannel } = config;
 
 client.commands = new Enmap();
 
@@ -41,12 +41,12 @@ client.on('message', message => {
   const command = getCommandFromArgs.shift().toLowerCase();
 
   // Define announcement channel for sending messages
-  const welcome = client.channels.get(welcomeChannel);
+  const clientEventChannel = client.channels.get(eventChannel);
   const everyone = "@everyone";
 
   const cmd = client.commands.get(command);
   if (!cmd) return;
-  cmd.run(client, message, args, welcome, everyone, getAdminName);
+  cmd.run(client, message, args, clientEventChannel, everyone, getAdminName);
 });
 
 client.on("messageReactionAdd", async (reaction, user) => {
