@@ -50,27 +50,45 @@ client.on('message', message => {
 });
 
 client.on("messageReactionAdd", async (reaction, user) => {
-  if(user.bot) return;
-  console.log(`${user.username} reacted with "${reaction.emoji.name}".`);
+  if (user.bot) return;
   const guildmember = await reaction.message.guild.fetchMember(user);
-  switch(reaction.emoji.name){
-    case 'HackTheBox':
-      guildmember.addRole(helperRoleList[0]).catch(console.error);
-      break;
-    default:
+  if (reaction.message.id === welcomeMessage){
+    switch (reaction.emoji.name) {
+      case 'HackTheBox':
+        guildmember.addRole(helperRoleList[0]).catch(console.error);
+        break;
+      case 'Linux':
+        guildmember.addRole(helperRoleList[1]).catch(console.error);
+        break;
+      case 'Helper':
+        guildmember.addRole(helperRoleList[2]).catch(console.error);
+        break;
+      default:
+        console.log("Invalid Reaction");
+    }
   }
+  console.log(`${user.username} reacted with "${reaction.emoji.name}".`);
 });
 
 client.on('messageReactionRemove', async (reaction, user) => {
-  if(user.bot) return;
-  console.log(`${user.username} removed their "${reaction.emoji.name}" reaction.`);
+  if (user.bot) return;
   const guildmember = await reaction.message.guild.fetchMember(user);
-  switch(reaction.emoji.name){
-    case 'HackTheBox':
-      guildmember.removeRole(helperRoleList[0]).catch(console.error);
-      break;
-    default:
+  if (reaction.message.id === welcomeMessage){
+    switch (reaction.emoji.name) {
+      case 'HackTheBox':
+        guildmember.removeRole(helperRoleList[0]).catch(console.error);
+        break;
+      case 'Linux':
+        guildmember.removeRole(helperRoleList[1]).catch(console.error);
+        break;
+      case 'Helper':
+        guildmember.removeRole(helperRoleList[2]).catch(console.error);
+        break;
+      default:
+        console.log("Invalid Reaction");
+    }
   }
+  console.log(`${user.username} removed their "${reaction.emoji.name}" reaction.`);
 });
 
 fs.readdir('./commands/', async (err, files) => {
