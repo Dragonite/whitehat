@@ -1,17 +1,16 @@
 const config = require("../botconfig.json");
 const adminList = config.adminList;
 
-exports.run = (client, message, args, announcementChannel, everyone, getAdminName) => {
+exports.run = (client, message, args, welcome, everyone, getAdminName) => {
   const newLineArgs = message.content.slice(config.prefix.length).trim().split('\n');
   newLineArgs.shift();
-  console.log(newLineArgs)
   if (adminList.includes(message.author.id)) {
     if (newLineArgs.length > 0) {
       const title = newLineArgs[0] || "Not Specified";
       const location = newLineArgs[1] || "Not Specified";
       const dateAndTime = newLineArgs[2] || "Not Specified";
       const extraInformation = newLineArgs[3] || "Not Specified";
-      announcementChannel.send({
+      message.channel.send({
         embed: {
           color: 3447003,
           title,
@@ -36,7 +35,7 @@ exports.run = (client, message, args, announcementChannel, everyone, getAdminNam
           }
         }
       })
-      announcementChannel.send(everyone).then(msg => { msg.delete(1) });
+      message.channel.send(everyone).then(msg => { msg.delete(1) }).catch(console.error);
     } else {
       message.channel.send({
         embed: {
@@ -70,11 +69,8 @@ exports.run = (client, message, args, announcementChannel, everyone, getAdminNam
         }
       });
     }
-    // let time = newLineArgs[1];
-    message.channel.send("You can use the `!event` command.");
-    // message.channel.send(`The event is at ${time}`)
   } else {
-    message.channel.send("You must be an administrator to use the `!event` command.");
+    message.channel.send("You must be an Administrator to use the `!event` command.");
   }
 }
 

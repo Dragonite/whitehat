@@ -4,7 +4,7 @@ const fs = require('fs');
 const Enmap = require('enmap');
 const client = new Discord.Client();
 
-const adminList = config.adminList;
+const { prefix, token, adminList, activity, welcomeChannel, welcomeMessage, helperRoleList } = config;
 
 client.commands = new Enmap();
 
@@ -16,10 +16,14 @@ function getAdminName(id) {
   }
 }
 
+console.log(config.startupMessage);
+
 client.on("ready", () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Connected to Discord. Logged in as ${client.user.tag}.`);
   // Set bot activity
-  client.user.setActivity('you hack ethically!', { type: 'WATCHING' });
+  client.user.setActivity(activity, { type: 'WATCHING' });
+  // Add welcome message to cache
+  client.channels.get(welcomeChannel).fetchMessage(welcomeMessage).catch(console.error);
 });
 
 client.on('message', message => {
@@ -29,20 +33,44 @@ client.on('message', message => {
   if (message.content.indexOf(config.prefix) !== 0) return;
 
   // Get arguments for space separated commands
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
   args.shift();
 
   // Get arguments for new line separated commands
-  const getCommandFromArgs = message.content.slice(config.prefix.length).trim().split(/[\n\r\s]+/g);
+  const getCommandFromArgs = message.content.slice(prefix.length).trim().split(/[\n\r\s]+/g);
   const command = getCommandFromArgs.shift().toLowerCase();
 
   // Define announcement channel for sending messages
-  const announcementChannel = client.channels.get(config.announcements);
+  const welcome = client.channels.get(welcomeChannel);
   const everyone = "@everyone";
 
   const cmd = client.commands.get(command);
   if (!cmd) return;
-  cmd.run(client, message, args, announcementChannel, everyone, getAdminName);
+  cmd.run(client, message, args, welcome, everyone, getAdminName);
+});
+
+client.on("messageReactionAdd", async (reaction, user) => {
+  if(user.bot) return;
+  console.log(`${user.username} reacted with "${reaction.emoji.name}".`);
+  const guildmember = await reaction.message.guild.fetchMember(user);
+  switch(reaction.emoji.name){
+    case 'HackTheBox':
+      guildmember.addRole(helperRoleList[0]).catch(console.error);
+      break;
+    default:
+  }
+});
+
+client.on('messageReactionRemove', async (reaction, user) => {
+  if(user.bot) return;
+  console.log(`${user.username} removed their "${reaction.emoji.name}" reaction.`);
+  const guildmember = await reaction.message.guild.fetchMember(user);
+  switch(reaction.emoji.name){
+    case 'HackTheBox':
+      guildmember.removeRole(helperRoleList[0]).catch(console.error);
+      break;
+    default:
+  }
 });
 
 fs.readdir('./commands/', async (err, files) => {
@@ -56,4 +84,4 @@ fs.readdir('./commands/', async (err, files) => {
   })
 });
 
-client.login(config.token)
+client.login(token)
