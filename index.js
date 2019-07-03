@@ -19,7 +19,7 @@ function getAdminName(id) {
 console.log(config.startupMessage);
 
 client.on("ready", () => {
-  console.log(`Connected to Discord. Logged in as ${client.user.tag}.`);
+  console.log(`Discord Connected!\nLogged in as ${client.user.tag}.`);
   // Set bot activity
   client.user.setActivity(activity, { type: 'WATCHING' });
   // Add welcome message to cache
