@@ -34,8 +34,19 @@ exports.run = (client, message, args, clientEventChannel, everyone, getAdminName
             text: getAdminName(message.author.id)
           }
         }
-      })
-      clientEventChannel.send(everyone).then(msg => { msg.delete(1) }).catch(console.error);
+      }).then(clientEventChannel.send(everyone).then(msg => { msg.delete(1) }).then(
+        message.channel.send({
+          embed: {
+            color: 1242520,
+            title: "Event created successfully!",
+            timestamp: new Date(),
+            footer: {
+              icon_url: message.author.avatarURL,
+              text: 'Created by ' + getAdminName(message.author.id)
+            }
+          }
+        })
+      ).then(console.log(`New event created by ${message.author.username}!`)).catch(console.error))
     } else {
       message.channel.send({
         embed: {
