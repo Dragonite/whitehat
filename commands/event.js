@@ -1,57 +1,74 @@
 const config = require("../botconfig.json");
-const adminList = config.adminList;
+const { adminList, colors } = config;
 
 exports.run = (client, message, args, clientEventChannel, everyone, getAdminName) => {
-  if(message.author.bot) return;
+  if (message.author.bot) return;
   const newLineArgs = message.content.slice(config.prefix.length).trim().split('\n');
   newLineArgs.shift();
   if (adminList.includes(message.author.id)) {
     if (newLineArgs.length > 0) {
-      const title = newLineArgs[0] || "Not Specified";
-      const location = newLineArgs[1] || "Not Specified";
-      const dateAndTime = newLineArgs[2] || "Not Specified";
-      const extraInformation = newLineArgs[3] || "Not Specified";
-      clientEventChannel.send({
-        embed: {
-          color: 3447003,
-          title,
-          fields: [
-            {
-              name: "Location",
-              value: location
-            },
-            {
-              name: "Date and Time",
-              value: dateAndTime
-            },
-            {
-              name: "Extra Information",
-              value: extraInformation
-            }
-          ],
-          timestamp: new Date(),
-          footer: {
-            icon_url: message.author.avatarURL,
-            text: getAdminName(message.author.id)
-          }
-        }
-      }).then(clientEventChannel.send(everyone).then(msg => { msg.delete(1) }).then(
-        message.channel.send({
+      if (newLineArgs.length <= 4) {
+        const title = newLineArgs[0] || "Not Specified";
+        const location = newLineArgs[1] || "Not Specified";
+        const dateAndTime = newLineArgs[2] || "Not Specified";
+        const extraInformation = newLineArgs[3] || "Not Specified";
+        clientEventChannel.send({
           embed: {
-            color: 1242520,
-            title: "Event created successfully!",
+            color: colors.info,
+            title,
+            fields: [
+              {
+                name: "Location",
+                value: location
+              },
+              {
+                name: "Date and Time",
+                value: dateAndTime
+              },
+              {
+                name: "Extra Information",
+                value: extraInformation
+              }
+            ],
             timestamp: new Date(),
             footer: {
-              icon_url: message.author.avatarURL,
-              text: 'Created by ' + getAdminName(message.author.id)
+              icon_url: client.user.avatarURL,
+              text: `UWA Ethical Hacking Club ${config.currentYear}`
             }
           }
-        })
-      ).then(console.log(`New event created by ${message.author.username}!`)).catch(console.error))
+        }).then(clientEventChannel.send(everyone).then(msg => { msg.delete(1) }).then(
+          message.channel.send({
+            embed: {
+              color: colors.success,
+              title: "Event created successfully!",
+              timestamp: new Date(),
+              footer: {
+                icon_url: message.author.avatarURL,
+                text: 'Created by ' + getAdminName(message.author.id)
+              }
+            }
+          })
+        ).then(console.log(`New event created by ${message.author.username}!`)).catch(console.error))
+      } else {
+        message.channel.send(
+          {
+            embed: {
+              color: colors.danger,
+              title: 'Invalid Command Structure',
+              description: "Please check the structure to creating an event by typing **!event**",
+              timestamp: new Date(),
+              footer: {
+                icon_url: client.user.avatarURL,
+                text: 'Bot'
+              }
+            }
+          }
+        )
+      }
     } else {
       message.channel.send({
         embed: {
-          color: 3447003,
+          color: colors.info,
           title: "Create an Event",
           description: "Events can be created using the **!event** command. Parameters are separated by a new line character. \n ```!event\nTitle\nLocation\nTime\nExtra Information```",
           fields: [{
@@ -73,8 +90,6 @@ exports.run = (client, message, args, clientEventChannel, everyone, getAdminName
           ],
           timestamp: new Date(),
           footer: {
-            // icon_url: message.author.avatarURL,
-            // text: getAdminName(message.author.id)
             icon_url: client.user.avatarURL,
             text: client.user.username
           }
