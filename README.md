@@ -3,7 +3,7 @@
     <a href="https://www.github.com/Dragonite/whitehat"><img src="https://puu.sh/DOxSB.png" alt="whitehat" width: "100" height: "100"></a>
 </h1>
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/requests-welcome-brightgreen.svg" alt="Requests Welcome"></a>
+  <a href="#Requests"><img src="https://img.shields.io/badge/requests-welcome-brightgreen.svg" alt="Requests Welcome"></a>
   <a href="https://discord.gg/docusaurus"><img src="https://img.shields.io/badge/join-discord-7289da.svg" alt="Discord"></a>
   <a href="https://www.npmjs.com/package/npm/v/6.4.1"><img src="https://img.shields.io/badge/npm-v6.4.1-blue.svg" alt="npm version"></a>
 </p>
