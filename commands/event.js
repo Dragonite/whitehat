@@ -2,6 +2,7 @@ const config = require("../botconfig.json");
 const adminList = config.adminList;
 
 exports.run = (client, message, args, clientEventChannel, everyone, getAdminName) => {
+  if(message.author.bot) return;
   const newLineArgs = message.content.slice(config.prefix.length).trim().split('\n');
   newLineArgs.shift();
   if (adminList.includes(message.author.id)) {
@@ -52,7 +53,7 @@ exports.run = (client, message, args, clientEventChannel, everyone, getAdminName
         embed: {
           color: 3447003,
           title: "Create an Event",
-          description: "Events can be created using the !event command. Fields are separated by a new line character. \n ```!event\nTitle\nLocation\nTime\nExtra Information```",
+          description: "Events can be created using the **!event** command. Parameters are separated by a new line character. \n ```!event\nTitle\nLocation\nTime\nExtra Information```",
           fields: [{
             name: "Title",
             value: "Title of the event"
