@@ -3,9 +3,10 @@ const { adminList, botChannel } = config;
 let connection = require('../sql');
 
 exports.run = async (client, message, args) => {
-  
+  // Prevent infinite bot loop
   if(message.author.bot) return;
 
+  // Get user information from ID, returns promise
   async function getUserInformation(id) {
     let query = `SELECT full_name,description,link FROM users WHERE discord_id = ${id}`;
     let promise = new Promise((resolve, reject) => {
@@ -17,6 +18,7 @@ exports.run = async (client, message, args) => {
     return promise;
   }
   
+  // Deletes a user from the database based on ID, returns a promise
   async function deleteUserInformation(id) {
     let query = `DELETE FROM users WHERE discord_id = ${id}`;
     let promise = new Promise((resolve, reject) => {
@@ -28,7 +30,9 @@ exports.run = async (client, message, args) => {
     return promise;
   }
 
+  // RegEx that checks that the start and end of the provided string are only digits
   const expression = /^\d*$/g;
+  // id and proceedWithMessage variables, id is based on how many arguments there are, proceed with message depends on a RegEx test
   let id;
   let proceedWithMessage = false;
   if (args.length > 0) {
@@ -42,13 +46,15 @@ exports.run = async (client, message, args) => {
     proceedWithMessage = true;
     id = message.author.id;
   }
+
+  // If we don't proceed with message, return a failed command structure message.
   if (!proceedWithMessage) {
     message.channel.send(
       {
         embed: {
           color: 25500,
           title: 'Invalid Command Structure',
-          description: "Please check someone's profile by tagging them `!profile @user`, or `!profile` for your own profile. ",
+          description: "Please check someone's profile by tagging them **!profile @user**, or **!profile** for your own profile. ",
           timestamp: new Date(),
           footer: {
             icon_url: client.user.avatarURL,
@@ -59,6 +65,7 @@ exports.run = async (client, message, args) => {
     );
 
   } else {
+    // Logic for own profile and also for checking other users profiles
     if (args.length <= 1) {
       getUserInformation(id).then((result) => {
         if (result === null || result === undefined || result.length === 0) {
@@ -102,8 +109,11 @@ exports.run = async (client, message, args) => {
           )
         }
       })
+      // If a second argument is provided, i.e. delete, etc
     } else if (args.length == 2) {
+      // delete case, check for administrator status, turn into switch case in the future if more commands are needed
       if (args[1].toLowerCase() === 'delete' && adminList.includes(message.author.id)) {
+        // SQL Query is immediately fired, and the result returned's affectedRows property tells us if a user was deleted or not
         deleteUserInformation(id).then((result) => {
           if (result.affectedRows === 0) {
             message.channel.send(
