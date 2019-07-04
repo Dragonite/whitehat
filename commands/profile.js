@@ -1,5 +1,5 @@
 const config = require("../botconfig.json");
-const { adminList, botChannel } = config;
+const { adminList, botChannel, colors } = config;
 let connection = require('../sql');
 
 exports.run = async (client, message, args) => {
@@ -52,7 +52,7 @@ exports.run = async (client, message, args) => {
     message.channel.send(
       {
         embed: {
-          color: 25500,
+          color: colors.danger,
           title: 'Invalid Command Structure',
           description: "Please check someone's profile by tagging them **!profile @user**, or **!profile** for your own profile. ",
           timestamp: new Date(),
@@ -72,7 +72,7 @@ exports.run = async (client, message, args) => {
           message.channel.send(
             {
               embed: {
-                color: 25500,
+                color: colors.info,
                 title: 'No Profile Exists',
                 description: args.length == 0 ? `To create your profile, use the **!register** command in <#${botChannel}>.` : "This user has not registered a profile yet.",
                 timestamp: new Date(),
@@ -87,7 +87,7 @@ exports.run = async (client, message, args) => {
           message.channel.send(
             {
               embed: {
-                color: 3447003,
+                color: colors.info,
                 title: result[0].full_name,
                 description: result[0].description,
                 fields: [
@@ -119,7 +119,7 @@ exports.run = async (client, message, args) => {
             message.channel.send(
               {
                 embed: {
-                  color: 25500,
+                  color: colors.info,
                   title: 'No profile exists to be deleted.',
                   timestamp: new Date(),
                   footer: {
@@ -133,7 +133,7 @@ exports.run = async (client, message, args) => {
             message.channel.send(
               {
                 embed: {
-                  color: 3447003,
+                  color: colors.success,
                   title: "Profile deleted!",
                   timestamp: new Date(),
                   footer: {
@@ -149,7 +149,7 @@ exports.run = async (client, message, args) => {
         message.channel.send(
           {
             embed: {
-              color: 3447003,
+              color: colors.info,
               title: "You must be an administrator to delete a profile.",
               timestamp: new Date(),
               footer: {
