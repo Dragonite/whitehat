@@ -1,6 +1,6 @@
 <h1 align="center">
   <p align="center">White Hat</p>
-    <a href="https://www.github.com/Dragonite/whitehat"><img src="https://puu.sh/DOxQF.png" alt="whitehat" width: "100" height: "100"></a>
+    <a href="https://www.github.com/Dragonite/whitehat"><img src="https://puu.sh/DOxSB.png" alt="whitehat" width: "100" height: "100"></a>
 </h1>
 <p align="center">
   <a href="#"><img src="https://img.shields.io/badge/requests-welcome-brightgreen.svg" alt="Requests Welcome"></a>
