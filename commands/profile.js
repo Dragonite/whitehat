@@ -1,42 +1,33 @@
 const config = require("../botconfig.json");
 const { adminList, botChannel } = config;
-
-const { host, user, database } = config.database;
-
-const mysql = require('mysql');
-
-let connection = mysql.createConnection({ host, user, database });
-
-connection.connect(function (err) {
-  if (err) {
-    throw err;
-  };
-  console.log("MySQL Connected!");
-});
-
-async function getUserInformation(id) {
-  let query = `SELECT full_name,description,link FROM users WHERE discord_id = ${id}`;
-  let promise = new Promise((resolve, reject) => {
-    connection.query(query, function (err, result) {
-      if (err) throw err;
-      resolve(result);
-    })
-  });
-  return promise;
-}
-
-async function deleteUserInformation(id) {
-  let query = `DELETE FROM users WHERE discord_id = ${id}`;
-  let promise = new Promise((resolve, reject) => {
-    connection.query(query, function (err, result) {
-      if (err) throw err;
-      resolve(result);
-    })
-  });
-  return promise;
-}
+let connection = require('../sql');
 
 exports.run = async (client, message, args) => {
+  
+  if(message.author.bot) return;
+
+  async function getUserInformation(id) {
+    let query = `SELECT full_name,description,link FROM users WHERE discord_id = ${id}`;
+    let promise = new Promise((resolve, reject) => {
+      connection.query(query, function (err, result) {
+        if (err) throw err;
+        resolve(result);
+      })
+    });
+    return promise;
+  }
+  
+  async function deleteUserInformation(id) {
+    let query = `DELETE FROM users WHERE discord_id = ${id}`;
+    let promise = new Promise((resolve, reject) => {
+      connection.query(query, function (err, result) {
+        if (err) throw err;
+        resolve(result);
+      })
+    });
+    return promise;
+  }
+
   const expression = /^\d*$/g;
   let id;
   let proceedWithMessage = false;
@@ -112,7 +103,7 @@ exports.run = async (client, message, args) => {
         }
       })
     } else if (args.length == 2) {
-      if (args[1].toLowerCase() === 'delete') {
+      if (args[1].toLowerCase() === 'delete' && adminList.includes(message.author.id)) {
         deleteUserInformation(id).then((result) => {
           if (result.affectedRows === 0) {
             message.channel.send(
@@ -144,6 +135,20 @@ exports.run = async (client, message, args) => {
             )
           }
         })
+      } else {
+        message.channel.send(
+          {
+            embed: {
+              color: 3447003,
+              title: "You must be an administrator to delete a profile.",
+              timestamp: new Date(),
+              footer: {
+                icon_url: client.user.avatarURL,
+                text: Bot
+              }
+            }
+          }
+        )
       }
     }
   }
