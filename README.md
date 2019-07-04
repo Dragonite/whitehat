@@ -1,8 +1,8 @@
 <h1 align="center">
   <p align="center">White Hat</p>
   <div style="display: flex; justify-content: center">
-    <a href="https://www.github.com/Dragonite/whitehat"><img src="https://puu.sh/DOxmH.png" alt="whitehat" style="width: 100px"></a>
-    <a href="https://discord.gg/NBqqAqp"><img src="https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg" alt="whitehat" style="width: 100px"></a>
+    <a href="https://www.github.com/Dragonite/whitehat"><img src="https://puu.sh/DOxmH.png" alt="whitehat" style="width: 100px; max-width: 100px"></a>
+    <a href="https://discord.gg/NBqqAqp"><img src="https://discordapp.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg" alt="whitehat" style="width: 100px; max-width: 100px"></a>
   </div>
 </h1>
 <p align="center">
