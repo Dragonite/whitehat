@@ -1,11 +1,11 @@
 const mysql = require('mysql');
 const config = require("./botconfig.json");
-const { host, user, database } = config.database;
+const { host, user, database, password } = config.database;
 
 let connection;
 
 function handleDisconnect() {
-  connection = mysql.createConnection({ host, user, database });
+  connection = mysql.createConnection({ host, user, password, database });
 
   connection.connect(function(err) {
     if(err) {
