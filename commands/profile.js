@@ -1,33 +1,31 @@
 const config = require("../botconfig.json");
 const { adminList, botChannel, colors } = config;
-let connection = require('../sql');
+let pool = require('../sql');
 
 exports.run = async (client, message, args) => {
   // Prevent infinite bot loop
-  if(message.author.bot) return;
+  if (message.author.bot) return;
 
   // Get user information from ID, returns promise
   async function getUserInformation(id) {
     let query = `SELECT full_name,description,link FROM users WHERE discord_id = ${id}`;
-    let promise = new Promise((resolve, reject) => {
-      connection.query(query, function (err, result) {
+    return new Promise((resolve, reject) => {
+      pool.query(query, function (err, result) {
         if (err) throw err;
-        resolve(result);
+        resolve(result)
       })
-    });
-    return promise;
+    })
   }
-  
+
   // Deletes a user from the database based on ID, returns a promise
   async function deleteUserInformation(id) {
     let query = `DELETE FROM users WHERE discord_id = ${id}`;
-    let promise = new Promise((resolve, reject) => {
-      connection.query(query, function (err, result) {
+    return new Promise((resolve, reject) => {
+      pool.query(query, function (err, result) {
         if (err) throw err;
-        resolve(result);
+        resolve(result)
       })
-    });
-    return promise;
+    })
   }
 
   // RegEx that checks that the start and end of the provided string are only digits

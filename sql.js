@@ -1,29 +1,7 @@
 const mysql = require('mysql');
 const config = require("./botconfig.json");
-const { host, user, database, password } = config.database;
+const { host, user, password, database } = config.database;
 
-let connection;
+let pool = mysql.createPool({ host, user, password, database });
 
-function handleDisconnect() {
-  connection = mysql.createConnection({ host, user, password, database });
-
-  connection.connect(function(err) {
-    if(err) {
-      console.log('error when connecting to db:', err);
-      setTimeout(handleDisconnect, 2000);
-    }
-    console.log('MySQL Connected!')
-  });
-  connection.on('error', function(err) {
-    console.log('db error', err);
-    if(err.code === 'PROTOCOL_CONNECTION_LOST') {
-      handleDisconnect();
-    } else {
-      throw err;
-    }
-  });
-}
-
-handleDisconnect();
-
-module.exports=connection;
+module.exports = pool;

@@ -1,18 +1,17 @@
 const config = require("../botconfig.json");
-let connection = require('../sql');
+let pool = require('../sql');
 const { colors } = config;
 
 exports.run = (client, message, args) => {
 
   async function createUser(id, full_name, description, link) {
     let query = `INSERT IGNORE INTO users (discord_id, full_name, description, link) VALUES ("${id}", "${full_name}", "${description}", "${link}")`;
-    let promise = new Promise((resolve, reject) => {
-      connection.query(query, function (err, result) {
+    return new Promise((resolve, reject) => {
+      pool.query(query, function (err, result) {
         if (err) throw err;
-        resolve(result);
+        resolve(result)
       })
-    });
-    return promise;
+    })
   }
 
   const newLineArgs = message.content.slice(config.prefix.length).trim().split('\n');
