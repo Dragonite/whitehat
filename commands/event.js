@@ -1,8 +1,23 @@
 const config = require("../botconfig.json");
 const { adminList, colors } = config;
+let pool = require('../sql');
 
 exports.run = (client, message, args, clientEventChannel, everyone, getAdminName) => {
+
+  // Prevent infinite bot loop
   if (message.author.bot) return;
+
+  // Get user information from ID, returns promise
+  async function addEvent(title, location, time, info) {
+    let query = `INSERT INTO events(title, location, time, info) VALUES ("${title}", "${location}", "${time}", "${info}")`;
+    return new Promise((resolve, reject) => {
+      pool.query(query, function (err, result) {
+        if (err) throw err;
+        resolve(result)
+      })
+    })
+  }
+
   const newLineArgs = message.content.slice(config.prefix.length).trim().split('\n');
   newLineArgs.shift();
   if (adminList.includes(message.author.id)) {
@@ -12,7 +27,8 @@ exports.run = (client, message, args, clientEventChannel, everyone, getAdminName
         const location = newLineArgs[1] || "Not Specified";
         const dateAndTime = newLineArgs[2] || "Not Specified";
         const extraInformation = newLineArgs[3] || "Not Specified";
-        clientEventChannel.send({
+
+        addEvent(title, location, dateAndTime, extraInformation).then(clientEventChannel.send({
           embed: {
             color: colors.info,
             title,
@@ -48,7 +64,7 @@ exports.run = (client, message, args, clientEventChannel, everyone, getAdminName
               }
             }
           })
-        ).then(console.log(`New event created by ${message.author.username}!`)).catch(console.error))
+        ).then(console.log(`New event created by ${message.author.username}!`)).catch(console.error))).catch(console.error)
       } else {
         message.channel.send(
           {
