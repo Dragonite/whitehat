@@ -84,5 +84,5 @@ exports.run = (client, message, args) => {
 }
 
 exports.help = {
-  name: 'event'
+  name: 'register'
 }
