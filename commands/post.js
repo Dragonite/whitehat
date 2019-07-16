@@ -32,7 +32,7 @@ exports.run = async (client, message, args) => {
               fields: [
                 {
                   name: "Organisers",
-                  value: `<@${config.adminList[1]}>\nJin Hong`
+                  value: `<@${config.adminList[1]}>\n<@${config.adminList[2]}>`
                 },
                 {
                   name: "Helper Roles",

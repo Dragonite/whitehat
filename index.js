@@ -13,6 +13,8 @@ function getAdminName(id) {
     return "Haolin Wu"
   } else if (id == adminList[1]) {
     return "David Glance"
+  } else if (id == adminList[2]) {
+    return "Jin Hong"
   }
 }
 
