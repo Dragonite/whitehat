@@ -4,8 +4,8 @@ const { colors } = config;
 
 exports.run = (client, message, args) => {
 
-  async function createUser(id, full_name, description, link) {
-    let query = `INSERT IGNORE INTO users (discord_id, full_name, description, link) VALUES ("${id}", "${full_name}", "${description}", "${link}")`;
+  async function createUser(id, full_name, description, link, htb) {
+    let query = `INSERT IGNORE INTO users (discord_id, full_name, description, link, htb) VALUES ("${id}", "${full_name}", "${description}", "${link}", "${htb}")`;
     return new Promise((resolve, reject) => {
       pool.query(query, function (err, result) {
         if (err) throw err;
@@ -21,7 +21,7 @@ exports.run = (client, message, args) => {
       embed: {
         color: colors.info,
         title: "Register your Profile",
-        description: "It's often hard to know who's who on Discord, so please register yourself in the following format:\n```!register\nFull Name\nDescription (Short description about yourself)\nLink (Github, LinkedIn, etc)```",
+        description: "It's often hard to know who's who on Discord, so please register yourself in the following format:\n```!register\nFull Name\nDescription (Short description about yourself)\nLink (Github, LinkedIn, etc)\nHackTheBox Profile ID```",
         footer: {
           icon_url: client.user.avatarURL,
           text: `UWA Ethical Hacking Club ${config.currentYear}`
@@ -29,11 +29,12 @@ exports.run = (client, message, args) => {
       }
     })
 
-  } else if (newLineArgs.length == 2 || newLineArgs.length == 3) {
+  } else if (newLineArgs.length == 2 || newLineArgs.length == 3 || newLineArgs.length == 4) {
     const full_name = newLineArgs[0];
     const description = newLineArgs[1];
     const link = newLineArgs[2] ? newLineArgs[2] : "No link provided";
-    createUser(message.author.id, full_name, description, link).then((result) => {
+    const htb = newLineArgs[3] ? newLineArgs[3] : "No HackTheBox Profile provided"
+    createUser(message.author.id, full_name, description, link, htb).then((result) => {
       if (result === null || result === undefined || result.affectedRows === 0) {
         message.channel.send(
           {

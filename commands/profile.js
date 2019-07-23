@@ -1,5 +1,6 @@
 const config = require("../botconfig.json");
 const { adminList, botChannel, colors } = config;
+const imageBase = 'https://www.hackthebox.eu/badge/image/';
 let pool = require('../sql');
 
 exports.run = async (client, message, args) => {
@@ -8,7 +9,7 @@ exports.run = async (client, message, args) => {
 
   // Get user information from ID, returns promise
   async function getUserInformation(id) {
-    let query = `SELECT full_name,description,link FROM users WHERE discord_id = ${id}`;
+    let query = `SELECT full_name,description,link,htb FROM users WHERE discord_id = ${id}`;
     return new Promise((resolve, reject) => {
       pool.query(query, function (err, result) {
         if (err) throw err;
@@ -66,6 +67,7 @@ exports.run = async (client, message, args) => {
     // Logic for own profile and also for checking other users profiles
     if (args.length <= 1) {
       getUserInformation(id).then((result) => {
+        console.log(result)
         if (result === null || result === undefined || result.length === 0) {
           message.channel.send(
             {
@@ -98,6 +100,9 @@ exports.run = async (client, message, args) => {
                     value: result[0].link ? result[0].link : "No link provided."
                   }
                 ],
+                image: {
+                  url: imageBase+result[0].htb ? imageBase+result[0].htb : "No HackTheBox profile provided.",
+                },
                 footer: {
                   icon_url: client.users.get(id).avatarURL,
                   text: client.users.get(id).username
