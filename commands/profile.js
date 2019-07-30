@@ -101,7 +101,7 @@ exports.run = async (client, message, args) => {
                   }
                 ],
                 image: {
-                  url: imageBase+result[0].htb ? imageBase+result[0].htb : undefined,
+                  url: imageBase+result[0].htb ? imageBase+result[0].htb : imageBase,
                 },
                 footer: {
                   icon_url: client.users.get(id).avatarURL,
