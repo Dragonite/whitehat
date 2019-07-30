@@ -101,7 +101,7 @@ exports.run = async (client, message, args) => {
                   }
                 ],
                 image: {
-                  url: imageBase+result[0].htb ? imageBase+result[0].htb : imageBase,
+                  url: result[0].htb!=='No HackTheBox Profile provided' ? imageBase+result[0].htb : imageBase,
                 },
                 footer: {
                   icon_url: client.users.get(id).avatarURL,
