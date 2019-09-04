@@ -4,8 +4,8 @@ const { colors } = config;
 
 exports.run = (client, message, args) => {
 
-  async function createUser(id, full_name, description, link, htb) {
-    let query = `INSERT IGNORE INTO users (discord_id, full_name, description, link, htb) VALUES ("${id}", "${full_name}", "${description}", "${link}", "${htb}")`;
+  async function createUser(id, full_name, description, link, htb, tag) {
+    let query = `INSERT IGNORE INTO users (discord_id, full_name, description, link, htb, discord_tag) VALUES ("${id}", "${full_name}", "${description}", "${link}", "${htb}", "${tag}")`;
     return new Promise((resolve, reject) => {
       pool.query(query, function (err, result) {
         if (err) throw err;
@@ -33,8 +33,9 @@ exports.run = (client, message, args) => {
     const full_name = newLineArgs[0];
     const description = newLineArgs[1];
     const link = newLineArgs[2] ? newLineArgs[2] : "No link provided";
-    const htb = newLineArgs[3] ? newLineArgs[3] : "No HackTheBox Profile provided"
-    createUser(message.author.id, full_name, description, link, htb).then((result) => {
+    const htb = newLineArgs[3] ? newLineArgs[3] : "No HackTheBox Profile provided";
+    const tag = message.author.tag;
+    createUser(message.author.id, full_name, description, link, htb, tag).then((result) => {
       if (result === null || result === undefined || result.affectedRows === 0) {
         message.channel.send(
           {

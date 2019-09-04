@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
 
   // Get user information from ID, returns promise
   async function getUserInformation(id) {
-    let query = `SELECT full_name,description,link,htb FROM users WHERE discord_id = ${id}`;
+    let query = `SELECT full_name,description,link,htb,discord_tag FROM users WHERE discord_id = ${id}`;
     return new Promise((resolve, reject) => {
       pool.query(query, function (err, result) {
         if (err) throw err;
@@ -93,7 +93,7 @@ exports.run = async (client, message, args) => {
                 fields: [
                   {
                     name: "Discord Tag",
-                    value: client.users.get(id).tag
+                    value: result[0].discord_tag ? result[0].discord_tag : client.users.get(id).tag
                   },
                   {
                     name: "Link",
